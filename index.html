@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Breaking Cycles - Empowering Women Through Education</title>
+    <title>Community Hub - Breaking Cycles</title>
     <style>
+        :root{
+            --primary-1: #667eea;
+            --primary-2: #764ba2;
+            --text: #2c3e50;
+            --muted: #7f8c8d;
+            --card-radius: 20px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,24 +22,22 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
-            color: #2c3e50;
-            overflow-x: hidden;
+            color: var(--text);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
         }
 
         /* Navigation */
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        nav.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .nav-container {
@@ -40,374 +46,127 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
-            position: relative;
+            padding: 0 clamp(1rem, 2vw, 2rem);
+            gap: 1rem;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: #667eea;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
+            color: var(--primary-1);
+            text-decoration: none;
+            display:flex;
+            align-items:center;
+            gap: .5rem;
         }
 
-        .logo::before {
-            content: '🌟';
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        /* Nav toggle (hamburger) */
+        .nav-toggle {
+          display: none;
+          background: transparent;
+          border: none;
+          font-size: 1.6rem;
+          cursor: pointer;
+          color: var(--text);
+          padding: .25rem .5rem;
         }
 
         .nav-links {
             display: flex;
             gap: 2rem;
             list-style: none;
+            align-items: center;
         }
 
-        .nav-link {
+        .nav-links a {
             text-decoration: none;
-            color: #2c3e50;
+            color: var(--text);
             font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+            padding: .4rem .6rem;
+            border-radius: 8px;
         }
 
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #667eea;
-            transition: width 0.3s ease;
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-1);
+            background: rgba(102,126,234,0.06);
         }
 
-        .nav-link:hover::after,
-        .nav-link.active::after {
-            width: 100%;
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
         }
 
-        .nav-link.active {
-            color: #667eea;
-        }
-
-        .mobile-menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .mobile-menu-toggle span {
-            width: 25px;
-            height: 3px;
-            background: #2c3e50;
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
-        .mobile-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
+        .btn-login, .btn-signup {
+            background: transparent;
+            border: 1px solid rgba(0,0,0,0.06);
+            padding: .5rem 1rem;
+            border-radius: 999px;
+            cursor:pointer;
             background: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 999;
         }
 
-        .mobile-menu.active {
-            display: block;
+        /* Header */
+        .page-header {
+            text-align: center;
+            padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 3vw, 2rem);
+            background: linear-gradient(135deg, var(--primary-1) 0%, var(--primary-2) 100%);
+            color: white;
         }
 
-        .mobile-menu a {
-            display: block;
-            padding: 1rem 2rem;
-            color: #2c3e50;
-            text-decoration: none;
-            border-bottom: 1px solid #ecf0f1;
+        .page-header h1 {
+            font-size: clamp(1.6rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            font-weight: 800;
         }
 
-        .mobile-menu a:hover {
-            background: #f8f9fa;
-            color: #667eea;
+        .page-header p {
+            font-size: clamp(.95rem, 1.6vw, 1.2rem);
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        /* Sections */
-        .section {
-            min-height: 100vh;
-            padding: 100px 0 50px 0;
-            position: relative;
-        }
-
+        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 clamp(1rem, 2vw, 2rem);
+        }
+
+        /* Community Groups */
+        .community-section {
+            padding: clamp(2rem, 4vw, 4rem) 0;
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #2c3e50;
+            font-size: clamp(1.4rem, 3vw, 2.5rem);
+            margin-bottom: 2rem;
+            color: var(--text);
             font-weight: 700;
         }
 
-        /* HOME SECTION */
-        .home-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            color: white;
-            text-align: center;
-            position: relative;
-        }
-
-        .home-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.1)"/><stop offset="100%" style="stop-color:rgba(255,255,255,0)"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)" opacity="0.5"><animate attributeName="r" values="50;120;50" dur="4s" repeatCount="indefinite"/></circle><circle cx="800" cy="300" r="80" fill="url(%23a)" opacity="0.3"><animate attributeName="r" values="40;100;40" dur="6s" repeatCount="indefinite"/></circle><circle cx="300" cy="700" r="90" fill="url(%23a)" opacity="0.4"><animate attributeName="r" values="60;110;60" dur="5s" repeatCount="indefinite"/></circle></svg>') center/cover;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(2deg); }
-        }
-
-        .hero-content {
-            max-width: 800px;
-            z-index: 2;
-            position: relative;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-            animation: fadeInUp 1s ease 0.2s both;
-        }
-
-        .mission-statement {
-            font-size: 1.3rem;
-            margin-bottom: 3rem;
-            opacity: 0.95;
-            font-weight: 300;
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 1s ease 0.6s both;
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary {
-            background: white;
-            color: #667eea;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(0,0,0,0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: #667eea;
-            transform: translateY(-2px);
-        }
-
-        .btn-tertiary {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .btn-tertiary:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-
-        /* LEARN SECTION */
-        .learn-section {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        }
-
-        .learn-grid {
+        .groups-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .category-card {
-            background: white;
-            border-radius: 20px;
-            padding: 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-
-        .category-header {
-            padding: 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-        }
-
-        .category-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .category-header h3 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .category-subtitle {
-            opacity: 0.9;
-            font-size: 1rem;
-        }
-
-        .category-content {
-            padding: 2rem;
-        }
-
-        .course-list {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .course-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            background: #f8f9fa;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .course-item:hover {
-            background: #e9ecef;
-            transform: translateX(5px);
-        }
-
-        .course-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .course-info h4 {
-            color: #2c3e50;
-            margin-bottom: 0.3rem;
-            font-size: 1.1rem;
-        }
-
-        .course-info p {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-
-        .course-stats {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.8rem;
-            color: #95a5a6;
-            margin-top: 0.3rem;
-        }
-
-        /* COMMUNITY SECTION */
-        .community-section {
-            background: white;
-        }
-
-        .community-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
         }
 
         .group-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 1.25rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
             position: relative;
             overflow: hidden;
+            display:flex;
+            flex-direction:column;
+            gap: .75rem;
         }
 
         .group-card::before {
@@ -417,62 +176,64 @@
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(90deg, var(--primary-1), var(--primary-2));
         }
 
         .group-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.10);
         }
 
         .group-header {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: .5rem;
         }
 
         .group-icon {
-            font-size: 2.5rem;
-            width: 60px;
-            height: 60px;
+            font-size: 1.6rem;
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary-1), var(--primary-2));
+            border-radius: 12px;
             color: white;
         }
 
         .group-info h3 {
-            font-size: 1.4rem;
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
+            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 0.25rem;
         }
 
         .group-stats {
             display: flex;
-            gap: 1rem;
-            font-size: 0.9rem;
-            color: #7f8c8d;
+            gap: .75rem;
+            font-size: .9rem;
+            color: var(--muted);
         }
 
         .group-description {
             color: #5a6c7d;
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
+            margin-bottom: .5rem;
+            line-height: 1.6;
+            flex:1;
         }
 
         .group-features {
             list-style: none;
-            margin-bottom: 2rem;
+            margin-bottom: 0.75rem;
+            padding-left: 0;
         }
 
         .group-features li {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             color: #5a6c7d;
         }
 
@@ -481,808 +242,255 @@
             font-size: 0.9rem;
         }
 
-        /* STORIES SECTION */
-        .stories-section {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-        }
-
-        .stories-section .section-title {
-            color: white;
-        }
-
-        .stories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .story-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .story-card:hover {
-            background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-5px);
-        }
-
-        .story-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .story-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .story-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.3rem;
-        }
-
-        .story-tagline {
-            opacity: 0.8;
-            font-size: 0.9rem;
-            font-style: italic;
-        }
-
-        .story-quote {
-            font-size: 1rem;
-            font-style: italic;
-            margin-bottom: 1rem;
-            padding-left: 1rem;
-            border-left: 3px solid rgba(255, 255, 255, 0.3);
-            opacity: 0.9;
-        }
-
-        .story-text {
-            opacity: 0.8;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-
-        /* CONTACT SECTION */
-        .contact-section {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        }
-
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
-        }
-
-        .founder-info {
-            background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .founder-avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 3rem;
-            margin: 0 auto 2rem;
-            border: 5px solid white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .founder-info h3 {
-            color: #2c3e50;
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .founder-title {
-            color: #667eea;
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-        }
-
-        .contact-details {
-            text-align: left;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            color: #5a6c7d;
-        }
-
-        .contact-form {
-            background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #ecf0f1;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .btn-submit {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .btn {
+            background: linear-gradient(135deg, var(--primary-1), var(--primary-2));
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 0.75rem 1rem;
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            width: 100%;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            display: none;
-            border: 1px solid #c3e6cb;
-        }
-
-        /* Stats Section */
-        .stats-section {
-            padding: 4rem 0;
-            background: #2c3e50;
-            color: white;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
             text-align: center;
-        }
-
-        .stat-item h3 {
-            font-size: 3rem;
-            color: #667eea;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-item p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .mission-statement {
-                font-size: 1.1rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-toggle {
-                display: flex;
-            }
-
-            .learn-grid,
-            .community-grid,
-            .stories-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .section {
-                padding: 80px 0 30px 0;
-            }
-        }
-
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Hide sections by default, show active */
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        /* Chat Room Modal */
-        .chat-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
         }
 
-        .chat-modal.active {
-            display: flex;
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.18);
         }
 
-        .chat-container {
+        /* Chat Preview */
+        .chat-preview {
             background: white;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 800px;
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            border-radius: 15px;
+            padding: clamp(1rem, 2.5vw, 2rem);
+            margin-top: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
         }
 
         .chat-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 1.5rem 2rem;
-            border-radius: 20px 20px 0 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-header-info {
             display: flex;
             align-items: center;
             gap: 1rem;
-        }
-
-        .chat-room-icon {
-            font-size: 2rem;
-        }
-
-        .chat-room-name h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .chat-room-status {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .close-chat {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .close-chat:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(90deg);
+            margin-bottom: 1rem;
+            padding-bottom: .5rem;
+            border-bottom: 1px solid #ecf0f1;
         }
 
         .chat-messages {
-            flex: 1;
+            max-height: 400px;
             overflow-y: auto;
-            padding: 2rem;
-            background: #f8f9fa;
+            margin-bottom: 1rem;
+            display:flex;
+            flex-direction:column;
+            gap: .5rem;
         }
 
-        .chat-message {
+        .message {
             display: flex;
             align-items: flex-start;
             gap: 1rem;
-            margin-bottom: 1.5rem;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            padding: 0.75rem;
+            border-radius: 10px;
+            background: #f8f9fa;
         }
 
         .message-avatar {
-            width: 40px;
-            height: 40px;
+            min-width:40px;
+            min-height:40px;
+            width:40px;
+            height:40px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, var(--primary-1), var(--primary-2));
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 600;
             font-size: 0.9rem;
-            flex-shrink: 0;
+            flex-shrink:0;
         }
 
-        .message-content {
-            flex: 1;
-        }
+        .message-content { flex:1; }
 
         .message-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 0.5rem;
+            gap: .75rem;
+            margin-bottom: 0.35rem;
         }
 
         .message-author {
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text);
+            font-size:.95rem;
         }
 
-        .message-time {
-            font-size: 0.8rem;
-            color: #7f8c8d;
-        }
+        .message-time { font-size: .8rem; color: var(--muted); }
 
-        .message-text {
-            color: #5a6c7d;
-            line-height: 1.6;
-            background: white;
-            padding: 1rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
+        .message-text { color: #5a6c7d; line-height: 1.5; }
 
-        .chat-input-container {
-            padding: 1.5rem 2rem;
-            background: white;
-            border-top: 1px solid #ecf0f1;
-            border-radius: 0 0 20px 20px;
-        }
-
-        .chat-input-wrapper {
+        .chat-input {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             align-items: center;
         }
 
-        .chat-input-wrapper input {
+        .chat-input input {
             flex: 1;
-            padding: 1rem;
+            padding: .75rem 1rem;
             border: 2px solid #ecf0f1;
             border-radius: 25px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.2s ease;
         }
 
-        .chat-input-wrapper input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
+        .chat-input input:focus { outline: none; border-color: var(--primary-1); }
 
         .send-btn {
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, var(--primary-1), var(--primary-2));
             color: white;
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
+            transition: transform 0.15s ease;
+            flex-shrink:0;
         }
 
-        .send-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        .send-btn:hover { transform: scale(1.05); }
+
+        /* Guidelines */
+        .community-guidelines {
+            background: white;
+            border-radius: var(--card-radius);
+            padding: 1.25rem;
+            margin-top: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
         }
 
-        /* Responsive Chat */
+        .guidelines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .guideline-item {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.06), rgba(118, 75, 162, 0.06));
+        }
+
+        .guideline-item .icon { font-size: 2rem; margin-bottom: .5rem; }
+        .guideline-item h4 { color: var(--text); margin-bottom: .5rem; }
+        .guideline-item p { color: var(--muted); font-size: .9rem; }
+
+        /* Focus states & accessibility */
+        button:focus, a:focus, input:focus { outline: 3px solid rgba(102,126,234,0.14); outline-offset: 3px; border-radius: 8px; }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .chat-container {
-                max-height: 95vh;
-                border-radius: 10px;
-            }
+            .page-header h1 { font-size: clamp(1.4rem, 6vw, 2rem); }
+            .groups-grid { grid-template-columns: 1fr; gap: .9rem; }
+            .message { padding: .5rem; flex-direction:row; }
+            .guidelines-grid { grid-template-columns: 1fr; }
 
-            .chat-header {
-                padding: 1rem;
-                border-radius: 10px 10px 0 0;
+            /* Mobile nav behavior */
+            .nav-toggle { display: block; }
+            .nav-links {
+              position: fixed;
+              top: 64px; /* height of nav */
+              right: 0;
+              width: 86%;
+              max-width: 320px;
+              height: calc(100% - 64px);
+              background: rgba(255,255,255,0.98);
+              padding: 1.5rem;
+              box-shadow: -10px 0 30px rgba(0,0,0,0.12);
+              transform: translateX(110%);
+              transition: transform 0.28s ease;
+              display: block;
+              z-index: 200;
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 1rem;
+              border-left: 1px solid rgba(0,0,0,0.03);
+              overflow-y:auto;
             }
-
-            .chat-room-icon {
-                font-size: 1.5rem;
-            }
-
-            .chat-room-name h3 {
-                font-size: 1.1rem;
-            }
-
-            .chat-messages {
-                padding: 1rem;
-            }
-
-            .chat-input-container {
-                padding: 1rem;
-                border-radius: 0 0 10px 10px;
-            }
+            .nav-links.open { transform: translateX(0); }
+            .nav-links li { width:100%; }
+            .nav-links a { display:block; width:100%; padding: .75rem 1rem; }
+            .auth-buttons { flex-direction: column; gap: .5rem; width:100%; }
+            .btn { width:100%; }
         }
+
+        @media (max-width:420px) {
+            .nav-links { width: 92%; max-width: 300px; }
+            .chat-messages { max-height: 260px; }
+        }
+
     </style>
 </head>
 <body>
     <!-- Navigation -->
-    <nav id="navbar">
+    <nav>
         <div class="nav-container">
-            <div class="logo" onclick="showSection('home')">Breaking Cycles</div>
-            <ul class="nav-links">
-                <li><a href="#home" class="nav-link active" onclick="showSection('home')">Home</a></li>
-                <li><a href="#learn" class="nav-link" onclick="showSection('learn')">Learn</a></li>
-                <li><a href="#community" class="nav-link" onclick="showSection('community')">Community</a></li>
-                <li><a href="#stories" class="nav-link" onclick="showSection('stories')">Stories</a></li>
-                <li><a href="#contact" class="nav-link" onclick="showSection('contact')">Contact</a></li>
-            </ul>
-            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
+            <a href="index.html" class="logo">🌟 <span>Breaking Cycles</span></a>
+
+            <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu">☰</button>
+
+            <ul class="nav-links" id="navLinks" role="menu" aria-hidden="true">
+    <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+    <li><a href="#learn" class="nav-link" data-section="learn">Learn</a></li>
+    <li><a href="#community" class="nav-link" data-section="community">Community</a></li>
+    <li><a href="#stories" class="nav-link" data-section="stories">Stories</a></li>
+    <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+
+    <li class="auth-buttons" style="display: flex; gap: 1rem;">
+        <button type="button" class="btn-login" data-action="open-auth" data-mode="login">Login</button>
+        <button type="button" class="btn-signup" data-action="open-auth" data-mode="signup">Sign Up</button>
+    </li>
+
+    <li class="user-menu">
+        <div class="user-dropdown" style="position:relative;">
+            <div class="user-avatar" id="userAvatar" tabindex="0" aria-haspopup="true" aria-expanded="false">
+                U
+                <span class="badge-indicator" id="badgeCount" style="display:none;">0</span>
+            </div>
+            <div class="dropdown-menu" id="userDropdown" style="display:none; position:absolute; right:0; top:calc(100% + .5rem); background:white; padding:.5rem; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.08); min-width:160px;">
+                <div class="dropdown-item" style="font-weight: 600; color: var(--primary-1);" id="userName">User</div>
+                <div class="dropdown-item" data-section="learn" style="cursor:pointer; padding:.5rem 0;">My Courses</div>
+                <div class="dropdown-item" id="adminLink" style="display:none; padding:.5rem 0; cursor:pointer;">Admin Panel</div>
+                <div class="dropdown-item" id="logoutBtn" style="padding:.5rem 0; cursor:pointer;">Logout</div>
             </div>
         </div>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#home" onclick="showSection('home'); closeMobileMenu()">Home</a>
-            <a href="#learn" onclick="showSection('learn'); closeMobileMenu()">Learn</a>
-            <a href="#community" onclick="showSection('community'); closeMobileMenu()">Community</a>
-            <a href="#stories" onclick="showSection('stories'); closeMobileMenu()">Stories</a>
-            <a href="#contact" onclick="showSection('contact'); closeMobileMenu()">Contact</a>
+    </li>
+</ul>
         </div>
     </nav>
 
-    <!-- HOME SECTION -->
-    <section id="home" class="section home-section active">
-        <div class="hero-content">
-            <h1>Breaking the Cycle</h1>
-            <p class="mission-statement">
-                Breaking the cycle of poverty among women through education and empowerment.
-            </p>
-            <div class="cta-buttons">
-                <a href="#community" class="btn btn-primary" onclick="showSection('community')">
-                    🤝 Join Community
-                </a>
-                <a href="#learn" class="btn btn-secondary" onclick="showSection('learn')">
-                    📚 Start Learning
-                </a>
-                <a href="#stories" class="btn btn-tertiary" onclick="showSection('stories')">
-                    ✨ Read Stories
-                </a>
-            </div>
-        </div>
+    <!-- Page Header -->
+    <section id="home" class="page-header">
+        <h1>Community Hub</h1>
+        <p>Connect, share experiences, and support each other on your journey to breaking cycles and building better futures.</p>
     </section>
 
-    <!-- LEARN SECTION -->
-    <section id="learn" class="section learn-section">
-        <div class="container">
-            <h2 class="section-title">Transform Your Future</h2>
-            <div class="learn-grid">
-                <div class="category-card">
-                    <div class="category-header">
-                        <div class="category-icon">💵</div>
-                        <h3>Financial Literacy</h3>
-                        <p class="category-subtitle">Master money management & wealth building</p>
-                    </div>
-                    <div class="category-content">
-                        <ul class="course-list">
-                            <li class="course-item">
-                                <div class="course-icon">📊</div>
-                                <div class="course-info">
-                                    <h4>Budgeting Basics</h4>
-                                    <p>Learn to create and stick to a budget</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.8</span>
-                                        <span>👥 1,234 students</span>
-                                        <span>⏱️ 2 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="course-item">
-                                <div class="course-icon">💰</div>
-                                <div class="course-info">
-                                    <h4>Saving & Emergency Funds</h4>
-                                    <p>Build financial security step by step</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.9</span>
-                                        <span>👥 987 students</span>
-                                        <span>⏱️ 3 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="course-item">
-                                <div class="course-icon">📈</div>
-                                <div class="course-info">
-                                    <h4>Investment Fundamentals</h4>
-                                    <p>Start your investment journey safely</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.7</span>
-                                        <span>👥 654 students</span>
-                                        <span>⏱️ 4 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <a href="#" class="btn btn-primary" style="width: 100%;">Explore All Courses</a>
-                    </div>
-                </div>
-
-                <div class="category-card">
-                    <div class="category-header">
-                        <div class="category-icon">💻</div>
-                        <h3>Coding & Tech</h3>
-                        <p class="category-subtitle">Build digital skills for the future</p>
-                    </div>
-                    <div class="category-content">
-                        <ul class="course-list">
-                            <li class="course-item">
-                                <div class="course-icon">🌐</div>
-                                <div class="course-info">
-                                    <h4>Web Development Basics</h4>
-                                    <p>HTML, CSS, and JavaScript fundamentals</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.9</span>
-                                        <span>👥 2,156 students</span>
-                                        <span>⏱️ 8 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="course-item">
-                                <div class="course-icon">🐍</div>
-                                <div class="course-info">
-                                    <h4>Python for Beginners</h4>
-                                    <p>Start your programming journey</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.8</span>
-                                        <span>👥 1,834 students</span>
-                                        <span>⏱️ 6 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="course-item">
-                                <div class="course-icon">📱</div>
-                                <div class="course-info">
-                                    <h4>Digital Marketing</h4>
-                                    <p>Social media and online presence</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.7</span>
-                                        <span>👥 1,245 students</span>
-                                        <span>⏱️ 5 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <a href="#" class="btn btn-primary" style="width: 100%;">Explore All Courses</a>
-                    </div>
-                </div>
-
-                <div class="category-card">
-                    <div class="category-header">
-                        <div class="category-icon">🚀</div>
-                        <h3>Entrepreneurship</h3>
-                        <p class="category-subtitle">Turn your ideas into thriving businesses</p>
-                    </div>
-                    <div class="category-content">
-                        <ul class="course-list">
-                            <li class="course-item">
-                                <div class="course-icon">💡</div>
-                                <div class="course-info">
-                                    <h4>Business Planning 101</h4>
-                                    <p>Create a solid business foundation</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.8</span>
-                                        <span>👥 876 students</span>
-                                        <span>⏱️ 4 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="course-item">
-                                <div class="course-icon">🎯</div>
-                                <div class="course-info">
-                                    <h4>Marketing Your Business</h4>
-                                    <p>Reach customers and grow sales</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.9</span>
-                                        <span>👥 1,023 students</span>
-                                        <span>⏱️ 3 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="course-item">
-                                <div class="course-icon">💼</div>
-                                <div class="course-info">
-                                    <h4>Funding Your Startup</h4>
-                                    <p>Explore financing options</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.6</span>
-                                        <span>👥 567 students</span>
-                                        <span>⏱️ 2 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <a href="#" class="btn btn-primary" style="width: 100%;">Explore All Courses</a>
-                    </div>
-                </div>
-
-                <div class="category-card">
-                    <div class="category-header">
-                        <div class="category-icon">💄</div>
-                        <h3>Beauty & Wellness</h3>
-                        <p class="category-subtitle">Build a career in beauty services</p>
-                    </div>
-                    <div class="category-content">
-                        <ul class="course-list">
-                            <li class="course-item">
-                                <div class="course-icon">💅</div>
-                                <div class="course-info">
-                                    <h4>Professional Nail Artistry</h4>
-                                    <p>Master manicures, pedicures, and nail art</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.9</span>
-                                        <span>👥 892 students</span>
-                                        <span>⏱️ 5 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="course-item">
-                                <div class="course-icon">✨</div>
-                                <div class="course-info">
-                                    <h4>Makeup Artistry Masterclass</h4>
-                                    <p>From basics to professional makeup techniques</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.8</span>
-                                        <span>👥 1,456 students</span>
-                                        <span>⏱️ 6 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="course-item">
-                                <div class="course-icon">🏪</div>
-                                <div class="course-info">
-                                    <h4>Starting Your Beauty Business</h4>
-                                    <p>Launch and grow your salon or studio</p>
-                                    <div class="course-stats">
-                                        <span>⭐ 4.7</span>
-                                        <span>👥 623 students</span>
-                                        <span>⏱️ 4 hours</span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <a href="#" class="btn btn-primary" style="width: 100%;">Explore All Courses</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stats Section -->
-            <div class="stats-section" style="border-radius: 30px; margin-top: 4rem;">
-                <div class="container">
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <h3 id="stat1">0</h3>
-                            <p>Women Empowered</p>
-                        </div>
-                        <div class="stat-item">
-                            <h3 id="stat2">0</h3>
-                            <p>Skills Learned</p>
-                        </div>
-                        <div class="stat-item">
-                            <h3 id="stat3">0</h3>
-                            <p>Success Stories</p>
-                        </div>
-                        <div class="stat-item">
-                            <h3 id="stat4">0</h3>
-                            <p>Communities</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- COMMUNITY SECTION -->
-    <section id="community" class="section community-section">
+    <!-- Community Groups -->
+    <section id="community" class="community-section">
         <div class="container">
             <h2 class="section-title">Join Your Community</h2>
-            <div class="community-grid">
+
+            <div class="groups-grid">
+                <!-- Young Mothers Group -->
                 <div class="group-card">
                     <div class="group-header">
                         <div class="group-icon">👶</div>
@@ -1295,7 +503,7 @@
                         </div>
                     </div>
                     <p class="group-description">
-                        A supportive space for young mothers to share experiences, parenting tips, and navigate education while raising children. Find balance, support, and inspiration from mothers who understand your journey.
+                        A supportive space for young mothers to share experiences, parenting tips, and navigate education while raising children. Find balance, support, and inspiration from mothers just like you.
                     </p>
                     <ul class="group-features">
                         <li>Daily check-ins and support</li>
@@ -1304,9 +512,10 @@
                         <li>Work-life balance tips</li>
                         <li>Mental health support</li>
                     </ul>
-                    <a href="#" class="btn btn-primary" style="width: 100%;" onclick="openChatRoom('Young Mothers Circle', '👶', 342)">Join Chat Room</a>
+                    <a href="#chat" class="btn" data-section="chat">Join Chat Room</a>
                 </div>
 
+                <!-- Disabled Girls Group -->
                 <div class="group-card">
                     <div class="group-header">
                         <div class="group-icon">♿</div>
@@ -1319,7 +528,7 @@
                         </div>
                     </div>
                     <p class="group-description">
-                        Celebrating abilities, sharing resources, and creating opportunities for girls and women with disabilities. Together, we break barriers and build inclusive futures filled with possibility.
+                        Celebrating abilities, sharing resources, and creating opportunities for girls and women with disabilities. Together, we break barriers and build inclusive futures filled with potential.
                     </p>
                     <ul class="group-features">
                         <li>Accessibility resource library</li>
@@ -1328,9 +537,10 @@
                         <li>Assistive technology tips</li>
                         <li>Advocacy and rights education</li>
                     </ul>
-                    <a href="#" class="btn btn-primary" style="width: 100%;" onclick="openChatRoom('Empowered Abilities', '♿', 186)">Join Chat Room</a>
+                    <a href="#chat" class="btn" data-section="chat">Join Chat Room</a>
                 </div>
 
+                <!-- General Support Group -->
                 <div class="group-card">
                     <div class="group-header">
                         <div class="group-icon">🤝</div>
@@ -1352,465 +562,274 @@
                         <li>Mentor-mentee matching</li>
                         <li>Crisis support network</li>
                     </ul>
-                    <a href="#" class="btn btn-primary" style="width: 100%;" onclick="openChatRoom('Sisters Supporting Sisters', '🤝', 567)">Join Chat Room</a>
+                    <a href="#chat" class="btn" data-section="chat">Join Chat Room</a>
+                </div>
+            </div>
+
+            <!-- Live Chat Preview -->
+            <div class="chat-preview" id="chat">
+                <div class="chat-header">
+                    <div class="group-icon" style="font-size: 1.2rem; width: 38px; height: 38px;">👶</div>
+                    <div>
+                        <h3>Young Mothers Circle - Live Chat</h3>
+                        <p style="color: var(--muted); font-size: 0.9rem;">24 members online</p>
+                    </div>
+                </div>
+
+                <div class="chat-messages" aria-live="polite">
+                    <div class="message">
+                        <div class="message-avatar">AM</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-author">Aisha M.</span>
+                                <span class="message-time">2 hours ago</span>
+                            </div>
+                            <p class="message-text">Just wanted to share - I finally submitted my college application today! It took months of studying while my little one napped, but we did it!</p>
+                        </div>
+                    </div>
+
+                    <div class="message">
+                        <div class="message-avatar">SL</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-author">Sarah L.</span>
+                                <span class="message-time">1 hour ago</span>
+                            </div>
+                            <p class="message-text">@Aisha That's incredible! You're such an inspiration. I'm still working up the courage to start my coding course. How do you manage study time?</p>
+                        </div>
+                    </div>
+
+                    <div class="message">
+                        <div class="message-avatar">RK</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-author">Rose K.</span>
+                                <span class="message-time">45 min ago</span>
+                            </div>
+                            <p class="message-text">Ladies, I found an amazing free childcare resource for study sessions! Sharing the link in our resources channel. We've got this! 🌟</p>
+                        </div>
+                    </div>
+
+                    <div class="message">
+                        <div class="message-avatar">MM</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-author">Munana M. (Founder)</span>
+                                <span class="message-time">30 min ago</span>
+                            </div>
+                            <p class="message-text">So proud of this community! Remember, every small step counts. You're not just changing your life - you're changing your children's future too.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input">
+                    <input type="text" placeholder="Share your thoughts, ask questions, or celebrate a win..." id="messageInput" aria-label="Chat message">
+                    <button class="send-btn" id="sendBtn" aria-label="Send message">📤</button>
+                </div>
+            </div>
+
+            <!-- Community Guidelines -->
+            <div class="community-guidelines" id="guidelines">
+                <h2 class="section-title" style="margin-bottom: 1rem;">Community Guidelines</h2>
+                <p style="text-align: center; color: var(--muted); margin-bottom: 1rem;">
+                    Our community thrives on respect, support, and shared growth. Let's create a safe space for everyone.
+                </p>
+
+                <div class="guidelines-grid">
+                    <div class="guideline-item">
+                        <div class="icon">💝</div>
+                        <h4>Be Kind & Supportive</h4>
+                        <p>Lift each other up. We're all on different parts of the same journey.</p>
+                    </div>
+                    <div class="guideline-item">
+                        <div class="icon">🔒</div>
+                        <h4>Respect Privacy</h4>
+                        <p>What's shared here stays here. Protect each other's stories and struggles.</p>
+                    </div>
+                    <div class="guideline-item">
+                        <div class="icon">🌈</div>
+                        <h4>Embrace Diversity</h4>
+                        <p>All backgrounds, abilities, and experiences are welcome and valued here.</p>
+                    </div>
+                    <div class="guideline-item">
+                        <div class="icon">📚</div>
+                        <h4>Share Knowledge</h4>
+                        <p>Share resources, opportunities, and lessons learned to help others grow.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- STORIES SECTION -->
-    <section id="stories" class="section stories-section">
-        <div class="container">
-            <h2 class="section-title">Stories of Transformation</h2>
-            <div class="stories-grid">
-                <div class="story-card">
-                    <div class="story-header">
-                        <div class="story-avatar">👑</div>
-                        <div>
-                            <h3 class="story-name">Oprah Winfrey</h3>
-                            <p class="story-tagline">From poverty to purpose</p>
-                        </div>
-                    </div>
-                    <blockquote class="story-quote">
-                        "The greatest discovery of all time is that a person can change their future by merely changing their attitude."
-                    </blockquote>
-                    <p class="story-text">
-                        Born into extreme poverty in rural Mississippi, Oprah faced unimaginable challenges - from wearing clothes made of potato sacks to experiencing abuse and teen pregnancy. Yet she refused to let her circumstances define her future. Through education, determination, and an unwavering belief in her potential, she transformed her life completely.
-                    </p>
-                    <p class="story-text">
-                        Today, she's built a media empire worth billions and continues to lift others through education initiatives, having donated over $400 million to educational causes.
-                    </p>
-                </div>
-
-                <div class="story-card">
-                    <div class="story-header">
-                        <div class="story-avatar">✍️</div>
-                        <div>
-                            <h3 class="story-name">Maya Angelou</h3>
-                            <p class="story-tagline">From silence to powerful voice</p>
-                        </div>
-                    </div>
-                    <blockquote class="story-quote">
-                        "There is no greater agony than bearing an untold story inside you."
-                    </blockquote>
-                    <p class="story-text">
-                        After experiencing trauma that left her silent for nearly five years as a child, Maya Angelou found her voice through literature and education. Growing up in the segregated South, she faced poverty, racism, and personal tragedy, yet she refused to be defeated.
-                    </p>
-                    <p class="story-text">
-                        Through education and mentorship, Maya transformed her pain into purpose, becoming one of America's most celebrated poets and authors, inspiring millions to find their own voices.
-                    </p>
-                </div>
-
-                <div class="story-card">
-                    <div class="story-header">
-                        <div class="story-avatar">📚</div>
-                        <div>
-                            <h3 class="story-name">Malala Yousafzai</h3>
-                            <p class="story-tagline">Education activist & Nobel Prize winner</p>
-                        </div>
-                    </div>
-                    <blockquote class="story-quote">
-                        "One child, one teacher, one book, and one pen can change the world."
-                    </blockquote>
-                    <p class="story-text">
-                        Growing up in Pakistan's Swat Valley, Malala faced death threats for advocating girls' education. After surviving an assassination attempt at age 15, she could have chosen silence and safety. Instead, she chose to speak louder.
-                    </p>
-                    <p class="story-text">
-                        Her courage made her the youngest Nobel Prize laureate in history. Through the Malala Fund, she continues to advocate for girls' education worldwide, proving that even the youngest voices can create powerful change.
-                    </p>
-                </div>
-
-                <div class="story-card">
-                    <div class="story-header">
-                        <div class="story-avatar">💄</div>
-                        <div>
-                            <h3 class="story-name">Munana Merveille</h3>
-                            <p class="story-tagline">Founder of Breaking Cycles</p>
-                        </div>
-                    </div>
-                    <blockquote class="story-quote">
-                        "Every woman deserves the chance to rewrite her story and break the cycles that have held her family back for generations."
-                    </blockquote>
-                    <p class="story-text">
-                        Growing up in Rwanda, I witnessed firsthand how cycles of poverty and limited opportunities can trap generations of women. But I also saw the incredible power of education and community support to break those cycles.
-                    </p>
-                    <p class="story-text">
-                        That's why I founded Breaking Cycles - to create a platform where women can access the tools, knowledge, and support they need to transform their lives and their children's futures.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONTACT SECTION -->
-    <section id="contact" class="section contact-section">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-content">
-                <div class="founder-info">
-                    <div class="founder-avatar">MM</div>
-                    <h3>Munana Merveille</h3>
-                    <p class="founder-title">Founder & Visionary</p>
-                    <div class="contact-details">
-                        <div class="contact-item">
-                            <span>📧</span>
-                            <span>m.munana@alustudent.com</span>
-                        </div>
-                        <div class="contact-item">
-                            <span>📱</span>
-                            <span>+250791839793</span>
-                        </div>
-                        <div class="contact-item">
-                            <span>🌍</span>
-                            <span>Kigali, Rwanda</span>
-                        </div>
-                        <div class="contact-item">
-                            <span>🏫</span>
-                            <span>ALU Student</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="contact-form">
-                    <h3 style="margin-bottom: 1.5rem; color: #2c3e50;">Send Us a Message</h3>
-                    <form id="contactForm" onsubmit="submitContact(event)">
-                        <div class="form-group">
-                            <label for="name">Your Name *</label>
-                            <input type="text" id="name" name="name" required placeholder="Enter your full name">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required placeholder="your.email@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject *</label>
-                            <input type="text" id="subject" name="subject" required placeholder="What's this about?">
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message *</label>
-                            <textarea id="message" name="message" required placeholder="Share your thoughts, questions, or how you'd like to get involved..."></textarea>
-                        </div>
-                        <button type="submit" class="btn-submit">📤 Send Message</button>
-                        <div id="contactSuccessMessage" class="success-message">
-                            ✅ Thank you for reaching out! We'll get back to you within 24-48 hours.
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Chat Room Modal -->
-    <div class="chat-modal" id="chatModal">
-        <div class="chat-container">
-            <div class="chat-header">
-                <div class="chat-header-info">
-                    <div class="chat-room-icon" id="chatRoomIcon">👶</div>
-                    <div class="chat-room-name">
-                        <h3 id="chatRoomName">Young Mothers Circle</h3>
-                        <p class="chat-room-status"><span id="onlineCount">24</span> members online</p>
-                    </div>
-                </div>
-                <button class="close-chat" onclick="closeChatRoom()">✕</button>
-            </div>
-            
-            <div class="chat-messages" id="chatMessages">
-                <div class="chat-message">
-                    <div class="message-avatar">AM</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-author">Aisha M.</span>
-                            <span class="message-time">2 hours ago</span>
-                        </div>
-                        <p class="message-text">Just wanted to share - I finally submitted my college application today! It took months of studying while my little one napped, but we did it! 💪✨</p>
-                    </div>
-                </div>
-
-                <div class="chat-message">
-                    <div class="message-avatar">SL</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-author">Sarah L.</span>
-                            <span class="message-time">1 hour ago</span>
-                        </div>
-                        <p class="message-text">@Aisha That's incredible! You're such an inspiration. I'm still working up the courage to start my coding course. How do you manage study time?</p>
-                    </div>
-                </div>
-
-                <div class="chat-message">
-                    <div class="message-avatar">RK</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-author">Rose K.</span>
-                            <span class="message-time">45 min ago</span>
-                        </div>
-                        <p class="message-text">Ladies, I found an amazing free childcare resource for study sessions! Sharing the link in our resources channel. We've got this! 🌟</p>
-                    </div>
-                </div>
-
-                <div class="chat-message">
-                    <div class="message-avatar">MM</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-author">Munana M. (Founder)</span>
-                            <span class="message-time">30 min ago</span>
-                        </div>
-                        <p class="message-text">So proud of this community! Remember, every small step counts. You're not just changing your life - you're changing your children's future too. Keep going! 💜</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="chat-input-container">
-                <div class="chat-input-wrapper">
-                    <input type="text" id="chatInput" placeholder="Share your thoughts, ask questions, or celebrate a win..." onkeypress="handleChatKeyPress(event)">
-                    <button class="send-btn" onclick="sendChatMessage()">📤</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
-        // Chat Room Data
-        const chatRoomData = {
-            'Young Mothers Circle': {
-                icon: '👶',
-                members: 342,
-                messages: [
-                    { author: 'Aisha M.', avatar: 'AM', time: '2 hours ago', text: 'Just wanted to share - I finally submitted my college application today! It took months of studying while my little one napped, but we did it! 💪✨' },
-                    { author: 'Sarah L.', avatar: 'SL', time: '1 hour ago', text: '@Aisha That\'s incredible! You\'re such an inspiration. I\'m still working up the courage to start my coding course. How do you manage study time?' },
-                    { author: 'Rose K.', avatar: 'RK', time: '45 min ago', text: 'Ladies, I found an amazing free childcare resource for study sessions! Sharing the link in our resources channel. We\'ve got this! 🌟' },
-                    { author: 'Munana M. (Founder)', avatar: 'MM', time: '30 min ago', text: 'So proud of this community! Remember, every small step counts. You\'re not just changing your life - you\'re changing your children\'s future too. Keep going! 💜' }
-                ]
-            },
-            'Empowered Abilities': {
-                icon: '♿',
-                members: 186,
-                messages: [
-                    { author: 'Grace N.', avatar: 'GN', time: '3 hours ago', text: 'Just got accepted to a web development bootcamp with full accessibility support! Dreams do come true! 🎉' },
-                    { author: 'Diana P.', avatar: 'DP', time: '2 hours ago', text: '@Grace That\'s amazing! Which bootcamp? I\'ve been looking for accessible tech programs.' },
-                    { author: 'Linda M.', avatar: 'LM', time: '1 hour ago', text: 'Remember ladies, our disabilities don\'t define our capabilities. Keep pushing boundaries! 💪' },
-                    { author: 'Munana M. (Founder)', avatar: 'MM', time: '45 min ago', text: 'Your strength and resilience inspire us all. Together, we\'re creating a more inclusive future! 🌈' }
-                ]
-            },
-            'Sisters Supporting Sisters': {
-                icon: '🤝',
-                members: 567,
-                messages: [
-                    { author: 'Patricia K.', avatar: 'PK', time: '4 hours ago', text: 'Today I celebrate 6 months of running my own business! Thank you all for the constant support and advice. 🎉' },
-                    { author: 'Jane W.', avatar: 'JW', time: '3 hours ago', text: 'Does anyone have tips for balancing work and studying? I start my financial literacy course next week!' },
-                    { author: 'Mary T.', avatar: 'MT', time: '2 hours ago', text: '@Jane I use early mornings before everyone wakes up. Also, the Pomodoro technique helps!' },
-                    { author: 'Elizabeth R.', avatar: 'ER', time: '1 hour ago', text: 'Just want to say this community has changed my life. From feeling alone to feeling empowered. Thank you sisters! 💖' },
-                    { author: 'Munana M. (Founder)', avatar: 'MM', time: '30 min ago', text: 'This is exactly why Breaking Cycles exists. You\'re all proving that together, we\'re unstoppable! 🚀' }
-                ]
-            }
-        };
+        /* -------------------------
+           Core interactive behavior
+           - Mobile nav toggle
+           - Navigation binding (data-section)
+           - Chat handling
+           - Card animations
+           - User dropdown handling
+           ------------------------- */
 
-        // Open Chat Room
-        function openChatRoom(roomName, icon, memberCount) {
-            event.preventDefault();
-            
-            const modal = document.getElementById('chatModal');
-            const roomData = chatRoomData[roomName];
-            
-            if (!roomData) return;
-            
-            // Update chat header
-            document.getElementById('chatRoomIcon').textContent = roomData.icon;
-            document.getElementById('chatRoomName').textContent = roomName;
-            document.getElementById('onlineCount').textContent = Math.floor(roomData.members * 0.15); // 15% online
-            
-            // Clear and populate messages
-            const messagesContainer = document.getElementById('chatMessages');
-            messagesContainer.innerHTML = '';
-            
-            roomData.messages.forEach(msg => {
-                const messageEl = document.createElement('div');
-                messageEl.className = 'chat-message';
-                messageEl.innerHTML = `
-                    <div class="message-avatar">${msg.avatar}</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-author">${msg.author}</span>
-                            <span class="message-time">${msg.time}</span>
-                        </div>
-                        <p class="message-text">${msg.text}</p>
-                    </div>
-                `;
-                messagesContainer.appendChild(messageEl);
-            });
-            
-            // Scroll to bottom
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            
-            // Show modal
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            
-            // Focus input
-            setTimeout(() => {
-                document.getElementById('chatInput').focus();
-            }, 100);
-        }
-
-        // Close Chat Room
-        function closeChatRoom() {
-            const modal = document.getElementById('chatModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            document.getElementById('chatInput').value = '';
-        }
-
-        // Send Chat Message
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
+        // Send message function (kept simple)
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
             const message = input.value.trim();
-            
+
             if (message) {
-                const messagesContainer = document.getElementById('chatMessages');
-                const messageEl = document.createElement('div');
-                messageEl.className = 'chat-message';
-                messageEl.innerHTML = `
-                    <div class="message-avatar">YOU</div>
+                const chatMessages = document.querySelector('.chat-messages');
+                const newMessage = document.createElement('div');
+                newMessage.className = 'message';
+                newMessage.innerHTML = `
+                    <div class="message-avatar">YU</div>
                     <div class="message-content">
                         <div class="message-header">
                             <span class="message-author">You</span>
                             <span class="message-time">Just now</span>
                         </div>
-                        <p class="message-text">${message}</p>
+                        <p class="message-text"></p>
                     </div>
                 `;
-                
-                messagesContainer.appendChild(messageEl);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                newMessage.querySelector('.message-text').textContent = message;
+
+                chatMessages.appendChild(newMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
                 input.value = '';
                 input.focus();
             }
         }
 
-        // Handle Enter key in chat
-        function handleChatKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendChatMessage();
-            }
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('chatModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeChatRoom();
-            }
-        });
-
-        // Section Navigation
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Update active nav link
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            document.querySelector(`a[onclick="showSection('${sectionId}')"]`).classList.add('active');
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-            
-            // Animate stats if on learn section
-            if (sectionId === 'learn' && !window.statsAnimated) {
-                setTimeout(() => {
-                    animateCounter('stat1', 1250, 2000);
-                    animateCounter('stat2', 3800, 2200);
-                    animateCounter('stat3', 450, 1800);
-                    animateCounter('stat4', 25, 1500);
-                    window.statsAnimated = true;
-                }, 300);
-            }
-        }
-
-        // Mobile Menu Toggle
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('active');
-        }
-
-        function closeMobileMenu() {
-            document.getElementById('mobileMenu').classList.remove('active');
-        }
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
+        // Robust showSection - scrolls to an element with given id, or logs if not found
+        function showSection(section) {
+            if (!section) return;
+            const el = document.getElementById(section);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // mark active nav-link
+                document.querySelectorAll('.nav-link').forEach(a => a.classList.toggle('active', a.dataset.section === section));
             } else {
-                navbar.classList.remove('scrolled');
+                console.log('showSection: no element with id', section);
             }
-        });
-
-        // Animated counters
-        function animateCounter(id, target, duration) {
-            const element = document.getElementById(id);
-            let start = 0;
-            const increment = target / (duration / 16);
-            
-            function updateCounter() {
-                start += increment;
-                if (start < target) {
-                    element.textContent = Math.floor(start).toLocaleString();
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    element.textContent = target.toLocaleString();
-                }
-            }
-            updateCounter();
         }
 
-        // Contact Form Submission
-        function submitContact(event) {
-            event.preventDefault();
-            
-            const formData = new FormData(event.target);
-            const contactData = Object.fromEntries(formData);
-            
-            console.log('Contact form submitted:', contactData);
-            
-            document.getElementById('contactSuccessMessage').style.display = 'block';
-            event.target.reset();
-            
-            setTimeout(() => {
-                document.getElementById('contactSuccessMessage').style.display = 'none';
-            }, 5000);
+        // User dropdown toggle
+        function toggleUserDropdown() {
+            const dd = document.getElementById('userDropdown');
+            const avatar = document.getElementById('userAvatar');
+            const visible = dd.style.display === 'block';
+            dd.style.display = visible ? 'none' : 'block';
+            avatar.setAttribute('aria-expanded', String(!visible));
         }
 
-        // Smooth scrolling for all links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
+        // Logout stub (adapt to your auth)
+        function logout() {
+            console.log('Logout clicked (implement auth integration)');
+            // Example: window.location = '/logout';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // NAV TOGGLE
+            const navToggle = document.getElementById('navToggle');
+            const navLinks = document.getElementById('navLinks');
+
+            function setNavOpen(open) {
+                navToggle.setAttribute('aria-expanded', String(open));
+                navLinks.setAttribute('aria-hidden', String(!open));
+                if (open) navLinks.classList.add('open');
+                else navLinks.classList.remove('open');
+            }
+
+            navToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+                setNavOpen(!expanded);
             });
-        });
 
-        // Add entrance animations
-        window.addEventListener('load', function() {
-            const cards = document.querySelectorAll('.category-card, .group-card, .story-card');
+            // close nav when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!navLinks.contains(e.target) && !navToggle.contains(e.target)) {
+                    setNavOpen(false);
+                }
+            });
+
+            // Bind links (data-section)
+            document.querySelectorAll('.nav-link, .dropdown-item[data-section], a[data-section]').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const section = this.dataset.section;
+                    if (section) showSection(section);
+                    // close mobile nav after click
+                    setNavOpen(false);
+                });
+            });
+
+            // Attach send handlers
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.addEventListener('click', sendMessage);
+
+            const messageInput = document.getElementById('messageInput');
+            messageInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Simple animation for group cards
+            const cards = document.querySelectorAll('.group-card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                card.style.transition = 'all 0.6s ease';
-                
+                card.style.transform = 'translateY(12px)';
+                card.style.transition = 'all 0.48s cubic-bezier(.2,.9,.2,1)';
                 setTimeout(() => {
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
-                }, index * 150);
+                }, 120 + index * 120);
+            });
+
+            // Auto-scroll chat messages to bottom
+            const chatMessages = document.querySelector('.chat-messages');
+            if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // User dropdown interactions
+            const userAvatar = document.getElementById('userAvatar');
+            const userDropdown = document.getElementById('userDropdown');
+            userAvatar.addEventListener('click', function (e) {
+                e.stopPropagation();
+                toggleUserDropdown();
+            });
+            // close userdropdown on outside click
+            document.addEventListener('click', function () {
+                if (userDropdown.style.display === 'block') {
+                    userDropdown.style.display = 'none';
+                    userAvatar.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Logout button
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) logoutBtn.addEventListener('click', logout);
+
+            // Open auth modal stub (replace with real modal implementation)
+            document.querySelectorAll('[data-action="open-auth"]').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const mode = this.dataset.mode || 'login';
+                    console.log('Open auth modal, mode:', mode);
+                    // openAuthModal(mode) if you have a modal implementation
+                });
+            });
+
+            // Keyboard: escape closes menus
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    setNavOpen(false);
+                    if (userDropdown.style.display === 'block') {
+                        userDropdown.style.display = 'none';
+                        userAvatar.setAttribute('aria-expanded', 'false');
+                    }
+                }
             });
         });
-
-        // Initialize stats animation flag
-        window.statsAnimated = false;
     </script>
 </body>
 </html>
