@@ -632,6 +632,42 @@
                 card.style.transform = 'translateY(0)';
             }, index * 200);
         });
-    </script>
+    </script> 
+    <script>
+// Force navigation to work
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ Page loaded');
+    
+    // Fix navigation clicks
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const section = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+            console.log('Navigating to:', section);
+            showSection(section);
+        });
+    });
+    
+    // Test if showSection exists
+    if (typeof showSection === 'function') {
+        console.log('✅ showSection function exists');
+    } else {
+        console.log('❌ showSection function missing!');
+    }
+});
+
+// Ensure inputs don't lose focus
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('input, textarea').forEach(input => {
+        input.addEventListener('blur', function(e) {
+            // Prevent unwanted blur
+            if (e.relatedTarget === null) {
+                e.preventDefault();
+                this.focus();
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
