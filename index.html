@@ -390,16 +390,31 @@
     <nav>
         <div class="nav-container">
             <a href="index.html" class="logo">🌟 Breaking Cycles</a>
-           <ul class="nav-links">
-    <li><a class="nav-link active" onclick="showSection('home')">Home</a></li>
-    <li><a class="nav-link" onclick="showSection('learn')">Learn</a></li>
-    <li><a class="nav-link" onclick="showSection('community')">Community</a></li>
-    <li><a class="nav-link" onclick="showSection('stories')">Stories</a></li>
-    <li><a class="nav-link" onclick="showSection('contact')">Contact</a></li>
+          <ul class="nav-links">
+    <li><a href="javascript:void(0)" class="nav-link active" onclick="showSection('home'); return false;">Home</a></li>
+    <li><a href="javascript:void(0)" class="nav-link" onclick="showSection('learn'); return false;">Learn</a></li>
+    <li><a href="javascript:void(0)" class="nav-link" onclick="showSection('community'); return false;">Community</a></li>
+    <li><a href="javascript:void(0)" class="nav-link" onclick="showSection('stories'); return false;">Stories</a></li>
+    <li><a href="javascript:void(0)" class="nav-link" onclick="showSection('contact'); return false;">Contact</a></li>
     
     <li class="auth-buttons" style="display: flex; gap: 1rem;">
         <button class="btn-login" onclick="openAuthModal('login')">Login</button>
         <button class="btn-signup" onclick="openAuthModal('signup')">Sign Up</button>
+    </li>
+    
+    <li class="user-menu">
+        <div class="user-dropdown">
+            <div class="user-avatar" onclick="toggleUserDropdown()" id="userAvatar">
+                U
+                <span class="badge-indicator" id="badgeCount" style="display:none;">0</span>
+            </div>
+            <div class="dropdown-menu" id="userDropdown">
+                <div class="dropdown-item" style="font-weight: 600; color: #667eea;" id="userName">User</div>
+                <div class="dropdown-item" onclick="showSection('learn')">My Courses</div>
+                <div class="dropdown-item" onclick="showSection('admin')" id="adminLink" style="display:none;">Admin Panel</div>
+                <div class="dropdown-item" onclick="logout()">Logout</div>
+            </div>
+        </div>
     </li>
 </ul>
         </div>
