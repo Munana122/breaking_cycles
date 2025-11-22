@@ -26,7 +26,7 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             -webkit-font-smoothing:antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            -moz-osx-font-smoothing:grayscale;
         }
 
         /* Navigation */
@@ -438,9 +438,14 @@
             .chat-messages { max-height: 260px; }
         }
 
+        /* Auth modal styles */
+        #authModal { display:none; align-items:center; justify-content:center; }
+        #authModal > div { box-shadow: 0 20px 60px rgba(0,0,0,0.18); }
+
     </style>
 </head>
 <body>
+    <a class="skip-link" href="#main" tabindex="0" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
@@ -484,6 +489,7 @@
         <p>Connect, share experiences, and support each other on your journey to breaking cycles and building better futures.</p>
     </section>
 
+    <main id="main">
     <!-- Community Groups -->
     <section id="community" class="community-section">
         <div class="container">
@@ -661,6 +667,95 @@
         </div>
     </section>
 
+    <!-- Learn (placeholder) -->
+    <section id="learn" class="community-section" aria-label="Learn">
+      <div class="container">
+        <h2 class="section-title">Learn</h2>
+        <p style="text-align:center;color:var(--muted);max-width:800px;margin:0 auto;">
+          Find free and low-cost courses, step-by-step learning paths, and curated resources to help you build skills and confidence.
+        </p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1rem;">
+          <div class="group-card">
+            <h3>Foundations Course</h3>
+            <p class="group-description">Short guided lessons on computing, numeracy, and confidence-building.</p>
+            <a class="btn" href="#">Start Learning</a>
+          </div>
+          <div class="group-card">
+            <h3>Career Paths</h3>
+            <p class="group-description">Guides and mentorship for job-readiness and entrepreneurship.</p>
+            <a class="btn" href="#">Explore</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stories -->
+    <section id="stories" class="community-section" aria-label="Stories">
+      <div class="container">
+        <h2 class="section-title">Stories</h2>
+        <p style="text-align:center;color:var(--muted);max-width:800px;margin:0 auto;">
+          Read real stories from community members — their challenges and successes.
+        </p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:1rem;">
+          <div class="group-card">
+            <h3>From Student to Graduate</h3>
+            <p class="group-description">A short story about perseverance and community support.</p>
+          </div>
+          <div class="group-card">
+            <h3>Small Business Win</h3>
+            <p class="group-description">How mentorship helped a member launch a micro-business.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="community-section" aria-label="Contact">
+      <div class="container">
+        <h2 class="section-title">Contact</h2>
+        <p style="text-align:center;color:var(--muted);max-width:800px;margin:0 auto;">
+          Need help or want to volunteer? Send us a message.
+        </p>
+
+        <div style="max-width:720px;margin:1rem auto;">
+          <form id="contactForm">
+            <div style="display:flex;flex-direction:column;gap:.5rem;">
+              <label for="contactName">Your name</label>
+              <input id="contactName" name="name" type="text" required style="padding:.75rem;border:2px solid #ecf0f1;border-radius:8px;">
+              <label for="contactEmail">Email</label>
+              <input id="contactEmail" name="email" type="email" required style="padding:.75rem;border:2px solid #ecf0f1;border-radius:8px;">
+              <label for="contactMessage">Message</label>
+              <textarea id="contactMessage" name="message" rows="5" required style="padding:.75rem;border:2px solid #ecf0f1;border-radius:8px;"></textarea>
+              <div style="display:flex;gap:.5rem;">
+                <button class="btn" type="submit">Send Message</button>
+              </div>
+              <div id="contactStatus" style="color:var(--muted);font-size:.95rem;margin-top:.5rem;display:none;"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    </main>
+
+    <!-- Simple Auth Modal (Login / Signup) -->
+    <div id="authModal" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;position:fixed;left:0;top:0;width:100%;height:100%;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:9999;">
+      <div style="background:white;border-radius:12px;padding:1.25rem;max-width:420px;width:92%;">
+        <button id="authClose" aria-label="Close" style="float:right;background:transparent;border:none;font-size:1.2rem;cursor:pointer;">✕</button>
+        <h3 id="authTitle">Login</h3>
+        <form id="authForm">
+          <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:1rem;">
+            <input id="authEmail" type="email" placeholder="Email" required style="padding:.75rem;border:2px solid #ecf0f1;border-radius:8px;">
+            <input id="authPassword" type="password" placeholder="Password" required style="padding:.75rem;border:2px solid #ecf0f1;border-radius:8px;">
+            <button class="btn" type="submit">Continue</button>
+          </div>
+        </form>
+        <p style="font-size:.9rem;color:var(--muted);margin-top:.75rem;">This is a UI stub. Connect to your auth backend to sign users in & up.</p>
+      </div>
+    </div>
+
     <script>
         /* -------------------------
            Core interactive behavior
@@ -669,6 +764,7 @@
            - Chat handling
            - Card animations
            - User dropdown handling
+           - Auth modal + contact form handlers
            ------------------------- */
 
         // Send message function (kept simple)
@@ -811,15 +907,51 @@
             if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
             // Open auth modal stub (replace with real modal implementation)
+            const authModal = document.getElementById('authModal');
+            const authTitle = document.getElementById('authTitle');
+            const authForm = document.getElementById('authForm');
+            const authClose = document.getElementById('authClose');
+
+            function openAuth(mode = 'login') {
+                if (!authModal) return console.warn('authModal missing');
+                authModal.style.display = 'flex';
+                authModal.setAttribute('aria-hidden', 'false');
+                authTitle.textContent = mode === 'signup' ? 'Sign Up' : 'Login';
+                // focus first input
+                document.getElementById('authEmail').focus();
+            }
+            function closeAuth() {
+                if (!authModal) return;
+                authModal.style.display = 'none';
+                authModal.setAttribute('aria-hidden', 'true');
+                document.querySelector('.btn-login')?.focus();
+            }
+
             document.querySelectorAll('[data-action="open-auth"]').forEach(btn => {
-                btn.addEventListener('click', function () {
+                btn.addEventListener('click', function (e) {
                     const mode = this.dataset.mode || 'login';
-                    console.log('Open auth modal, mode:', mode);
-                    // openAuthModal(mode) if you have a modal implementation
+                    openAuth(mode);
                 });
             });
+            if (authClose) authClose.addEventListener('click', closeAuth);
+            if (authModal) authModal.addEventListener('click', function (e) { if (e.target === authModal) closeAuth(); });
+            if (authForm) authForm.addEventListener('submit', function (e) { e.preventDefault(); console.log('Auth submitted', { email: authForm.authEmail?.value, mode: authTitle.textContent }); closeAuth(); });
 
-            // Keyboard: escape closes menus
+            // Contact form handling
+            const contactForm = document.getElementById('contactForm');
+            const contactStatus = document.getElementById('contactStatus');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const data = { name: contactForm.name?.value, email: contactForm.email?.value, message: contactForm.message?.value };
+                    contactStatus.style.display = 'block';
+                    contactStatus.style.color = 'green';
+                    contactStatus.textContent = 'Thanks — your message was received (demo).';
+                    contactForm.reset();
+                });
+            }
+
+            // ensure Escape closes modal too
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     setNavOpen(false);
@@ -827,6 +959,7 @@
                         userDropdown.style.display = 'none';
                         userAvatar.setAttribute('aria-expanded', 'false');
                     }
+                    if (authModal && authModal.style.display === 'flex') closeAuth();
                 }
             });
         });
