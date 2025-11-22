@@ -40,18 +40,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
+            padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 4vw, 2rem);
             position: relative;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: clamp(1.25rem, 3vw, 1.5rem);
             font-weight: 700;
             color: #667eea;
             display: flex;
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
+            text-decoration: none;
         }
 
         .logo::before {
@@ -77,6 +78,14 @@
             transition: all 0.3s ease;
             position: relative;
             padding: 0.5rem 0;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
         }
 
         .nav-link::after {
@@ -99,47 +108,103 @@
             color: #667eea;
         }
 
-        .mobile-menu-toggle {
+        /* Mobile nav toggle button */
+        #navToggle {
             display: none;
             flex-direction: column;
+            justify-content: center;
             cursor: pointer;
             padding: 0.5rem;
+            background: none;
+            border: none;
+            min-width: 44px;
+            min-height: 44px;
+            position: relative;
+            z-index: 1001;
         }
 
-        .mobile-menu-toggle span {
+        #navToggle:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        #navToggle span {
             width: 25px;
             height: 3px;
             background: #2c3e50;
             margin: 3px 0;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            display: block;
         }
 
-        .mobile-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
+        #navToggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        #navToggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        #navToggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Off-canvas mobile menu */
+        #navLinks {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: min(80%, 300px);
+            height: 100vh;
             background: white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 999;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            padding-top: 80px;
+            overflow-y: auto;
         }
 
-        .mobile-menu.active {
-            display: block;
+        #navLinks.active {
+            right: 0;
         }
 
-        .mobile-menu a {
+        #navLinks a {
             display: block;
-            padding: 1rem 2rem;
+            padding: 1.25rem 2rem;
             color: #2c3e50;
             text-decoration: none;
             border-bottom: 1px solid #ecf0f1;
+            transition: all 0.2s ease;
+            min-height: 44px;
+            font-size: 1.1rem;
         }
 
-        .mobile-menu a:hover {
+        #navLinks a:focus {
+            outline: 2px solid #667eea;
+            outline-offset: -2px;
+        }
+
+        #navLinks a:hover,
+        #navLinks a.active {
             background: #f8f9fa;
             color: #667eea;
+            padding-left: 2.5rem;
+        }
+
+        /* Overlay for mobile menu */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .nav-overlay.active {
+            display: block;
         }
 
         /* Sections */
@@ -152,12 +217,12 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 0 clamp(1rem, 4vw, 2rem);
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
             margin-bottom: 3rem;
             color: #2c3e50;
             font-weight: 700;
@@ -198,7 +263,7 @@
         }
 
         .hero-content h1 {
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 6vw, 3.5rem);
             margin-bottom: 1.5rem;
             font-weight: 800;
             line-height: 1.2;
@@ -206,7 +271,7 @@
         }
 
         .mission-statement {
-            font-size: 1.3rem;
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
             margin-bottom: 3rem;
             opacity: 0.95;
             font-weight: 300;
@@ -236,7 +301,7 @@
             padding: 1rem 2rem;
             border: none;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -246,6 +311,13 @@
             gap: 0.5rem;
             position: relative;
             overflow: hidden;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .btn:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
         }
 
         .btn-primary {
@@ -290,7 +362,7 @@
 
         .learn-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
             gap: 2rem;
             margin-bottom: 4rem;
         }
@@ -713,24 +785,11 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .mission-statement {
-                font-size: 1.1rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
             .nav-links {
                 display: none;
             }
 
-            .mobile-menu-toggle {
+            #navToggle {
                 display: flex;
             }
 
@@ -751,6 +810,21 @@
 
             .section {
                 padding: 80px 0 30px 0;
+            }
+
+            .chat-container {
+                max-height: 100vh;
+                border-radius: 0;
+            }
+
+            .chat-input-area input {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1004,29 +1078,34 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav id="navbar">
+    <nav id="navbar" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
-            <div class="logo" onclick="showSection('home')">Breaking Cycles</div>
-            <ul class="nav-links">
-                <li><a href="#home" class="nav-link active" onclick="showSection('home')">Home</a></li>
-                <li><a href="#learn" class="nav-link" onclick="showSection('learn')">Learn</a></li>
-                <li><a href="#community" class="nav-link" onclick="showSection('community')">Community</a></li>
-                <li><a href="#stories" class="nav-link" onclick="showSection('stories')">Stories</a></li>
-                <li><a href="#contact" class="nav-link" onclick="showSection('contact')">Contact</a></li>
+            <a href="#home" class="logo" data-section="home" aria-label="Breaking Cycles Home">Breaking Cycles</a>
+            <ul class="nav-links" role="menubar">
+                <li role="none"><a href="#home" class="nav-link active" data-section="home" role="menuitem">Home</a></li>
+                <li role="none"><a href="#learn" class="nav-link" data-section="learn" role="menuitem">Learn</a></li>
+                <li role="none"><a href="#community" class="nav-link" data-section="community" role="menuitem">Community</a></li>
+                <li role="none"><a href="#stories" class="nav-link" data-section="stories" role="menuitem">Stories</a></li>
+                <li role="none"><a href="#contact" class="nav-link" data-section="contact" role="menuitem">Contact</a></li>
             </ul>
-            <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <button id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
+            </button>
         </div>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#home" onclick="showSection('home'); closeMobileMenu()">Home</a>
-            <a href="#learn" onclick="showSection('learn'); closeMobileMenu()">Learn</a>
-            <a href="#community" onclick="showSection('community'); closeMobileMenu()">Community</a>
-            <a href="#stories" onclick="showSection('stories'); closeMobileMenu()">Stories</a>
-            <a href="#contact" onclick="showSection('contact'); closeMobileMenu()">Contact</a>
-        </div>
+    </nav>
+    
+    <!-- Mobile menu overlay -->
+    <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+    
+    <!-- Off-canvas mobile menu -->
+    <nav id="navLinks" role="navigation" aria-label="Mobile navigation">
+        <a href="#home" data-section="home" class="active">Home</a>
+        <a href="#learn" data-section="learn">Learn</a>
+        <a href="#community" data-section="community">Community</a>
+        <a href="#stories" data-section="stories">Stories</a>
+        <a href="#contact" data-section="contact">Contact</a>
     </nav>
 
     <!-- HOME SECTION -->
@@ -1037,13 +1116,13 @@
                 Breaking the cycle of poverty among women through education and empowerment.
             </p>
             <div class="cta-buttons">
-                <a href="#community" class="btn btn-primary" onclick="showSection('community')">
+                <a href="#community" class="btn btn-primary" data-section="community">
                     🤝 Join Community
                 </a>
-                <a href="#learn" class="btn btn-secondary" onclick="showSection('learn')">
+                <a href="#learn" class="btn btn-secondary" data-section="learn">
                     📚 Start Learning
                 </a>
-                <a href="#stories" class="btn btn-tertiary" onclick="showSection('stories')">
+                <a href="#stories" class="btn btn-tertiary" data-section="stories">
                     ✨ Read Stories
                 </a>
             </div>
@@ -1304,7 +1383,7 @@
                         <li>Work-life balance tips</li>
                         <li>Mental health support</li>
                     </ul>
-                    <a href="#" class="btn btn-primary" style="width: 100%;" onclick="openChatRoom('Young Mothers Circle', '👶', 342)">Join Chat Room</a>
+                    <a href="#" class="btn btn-primary" style="width: 100%;" data-chat-room="Young Mothers Circle" data-chat-icon="👶" data-chat-members="342">Join Chat Room</a>
                 </div>
 
                 <div class="group-card">
@@ -1328,7 +1407,7 @@
                         <li>Assistive technology tips</li>
                         <li>Advocacy and rights education</li>
                     </ul>
-                    <a href="#" class="btn btn-primary" style="width: 100%;" onclick="openChatRoom('Empowered Abilities', '♿', 186)">Join Chat Room</a>
+                    <a href="#" class="btn btn-primary" style="width: 100%;" data-chat-room="Empowered Abilities" data-chat-icon="♿" data-chat-members="186">Join Chat Room</a>
                 </div>
 
                 <div class="group-card">
@@ -1352,7 +1431,7 @@
                         <li>Mentor-mentee matching</li>
                         <li>Crisis support network</li>
                     </ul>
-                    <a href="#" class="btn btn-primary" style="width: 100%;" onclick="openChatRoom('Sisters Supporting Sisters', '🤝', 567)">Join Chat Room</a>
+                    <a href="#" class="btn btn-primary" style="width: 100%;" data-chat-room="Sisters Supporting Sisters" data-chat-icon="🤝" data-chat-members="567">Join Chat Room</a>
                 </div>
             </div>
         </div>
@@ -1473,7 +1552,7 @@
 
                 <div class="contact-form">
                     <h3 style="margin-bottom: 1.5rem; color: #2c3e50;">Send Us a Message</h3>
-                    <form id="contactForm" onsubmit="submitContact(event)">
+                    <form id="contactForm">
                         <div class="form-group">
                             <label for="name">Your Name *</label>
                             <input type="text" id="name" name="name" required placeholder="Enter your full name">
@@ -1511,7 +1590,7 @@
                         <p class="chat-room-status"><span id="onlineCount">24</span> members online</p>
                     </div>
                 </div>
-                <button class="close-chat" onclick="closeChatRoom()">✕</button>
+                <button class="close-chat" id="closeChatBtn" aria-label="Close chat">✕</button>
             </div>
             
             <div class="chat-messages" id="chatMessages">
@@ -1562,8 +1641,8 @@
             
             <div class="chat-input-container">
                 <div class="chat-input-wrapper">
-                    <input type="text" id="chatInput" placeholder="Share your thoughts, ask questions, or celebrate a win..." onkeypress="handleChatKeyPress(event)">
-                    <button class="send-btn" onclick="sendChatMessage()">📤</button>
+                    <input type="text" id="chatInput" placeholder="Share your thoughts, ask questions, or celebrate a win..." aria-label="Chat message input">
+                    <button class="send-btn" id="sendChatBtn" aria-label="Send message">📤</button>
                 </div>
             </div>
         </div>
@@ -1605,212 +1684,308 @@
             }
         };
 
-        // Open Chat Room
-        function openChatRoom(roomName, icon, memberCount) {
-            event.preventDefault();
-            
-            const modal = document.getElementById('chatModal');
-            const roomData = chatRoomData[roomName];
-            
-            if (!roomData) return;
-            
-            // Update chat header
-            document.getElementById('chatRoomIcon').textContent = roomData.icon;
-            document.getElementById('chatRoomName').textContent = roomName;
-            document.getElementById('onlineCount').textContent = Math.floor(roomData.members * 0.15); // 15% online
-            
-            // Clear and populate messages
-            const messagesContainer = document.getElementById('chatMessages');
-            messagesContainer.innerHTML = '';
-            
-            roomData.messages.forEach(msg => {
-                const messageEl = document.createElement('div');
-                messageEl.className = 'chat-message';
-                messageEl.innerHTML = `
-                    <div class="message-avatar">${msg.avatar}</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-author">${msg.author}</span>
-                            <span class="message-time">${msg.time}</span>
-                        </div>
-                        <p class="message-text">${msg.text}</p>
-                    </div>
-                `;
-                messagesContainer.appendChild(messageEl);
-            });
-            
-            // Scroll to bottom
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            
-            // Show modal
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            
-            // Focus input
-            setTimeout(() => {
-                document.getElementById('chatInput').focus();
-            }, 100);
-        }
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize stats animation flag
+            window.statsAnimated = false;
 
-        // Close Chat Room
-        function closeChatRoom() {
-            const modal = document.getElementById('chatModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            document.getElementById('chatInput').value = '';
-        }
-
-        // Send Chat Message
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
+            // === NAVIGATION ===
             
-            if (message) {
-                const messagesContainer = document.getElementById('chatMessages');
-                const messageEl = document.createElement('div');
-                messageEl.className = 'chat-message';
-                messageEl.innerHTML = `
-                    <div class="message-avatar">YOU</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-author">You</span>
-                            <span class="message-time">Just now</span>
-                        </div>
-                        <p class="message-text">${message}</p>
-                    </div>
-                `;
-                
-                messagesContainer.appendChild(messageEl);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                input.value = '';
-                input.focus();
-            }
-        }
+            // Robust showSection function with scroll and highlighting
+            function showSection(sectionId) {
+                // Get the section element
+                const section = document.getElementById(sectionId);
+                if (!section) return;
 
-        // Handle Enter key in chat
-        function handleChatKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendChatMessage();
-            }
-        }
+                // Hide all sections
+                document.querySelectorAll('.section').forEach(s => {
+                    s.classList.remove('active');
+                });
 
-        // Close modal when clicking outside
-        document.getElementById('chatModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeChatRoom();
-            }
-        });
+                // Show selected section
+                section.classList.add('active');
 
-        // Section Navigation
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            // Show selected section
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Update active nav link
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            document.querySelector(`a[onclick="showSection('${sectionId}')"]`).classList.add('active');
-            
-            // Scroll to top
-            window.scrollTo(0, 0);
-            
-            // Animate stats if on learn section
-            if (sectionId === 'learn' && !window.statsAnimated) {
-                setTimeout(() => {
-                    animateCounter('stat1', 1250, 2000);
-                    animateCounter('stat2', 3800, 2200);
-                    animateCounter('stat3', 450, 1800);
-                    animateCounter('stat4', 25, 1500);
-                    window.statsAnimated = true;
-                }, 300);
-            }
-        }
+                // Update active nav link in desktop menu
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.section === sectionId) {
+                        link.classList.add('active');
+                    }
+                });
 
-        // Mobile Menu Toggle
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('active');
-        }
+                // Update active nav link in mobile menu
+                document.querySelectorAll('#navLinks a').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.section === sectionId) {
+                        link.classList.add('active');
+                    }
+                });
 
-        function closeMobileMenu() {
-            document.getElementById('mobileMenu').classList.remove('active');
-        }
+                // Scroll to the section
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
+                // Close mobile menu if open
+                closeMobileNav();
 
-        // Animated counters
-        function animateCounter(id, target, duration) {
-            const element = document.getElementById(id);
-            let start = 0;
-            const increment = target / (duration / 16);
-            
-            function updateCounter() {
-                start += increment;
-                if (start < target) {
-                    element.textContent = Math.floor(start).toLocaleString();
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    element.textContent = target.toLocaleString();
+                // Animate stats if on learn section
+                if (sectionId === 'learn' && !window.statsAnimated) {
+                    setTimeout(() => {
+                        animateCounter('stat1', 1250, 2000);
+                        animateCounter('stat2', 3800, 2200);
+                        animateCounter('stat3', 450, 1800);
+                        animateCounter('stat4', 25, 1500);
+                        window.statsAnimated = true;
+                    }, 300);
                 }
             }
-            updateCounter();
-        }
 
-        // Contact Form Submission
-        function submitContact(event) {
-            event.preventDefault();
-            
-            const formData = new FormData(event.target);
-            const contactData = Object.fromEntries(formData);
-            
-            console.log('Contact form submitted:', contactData);
-            
-            document.getElementById('contactSuccessMessage').style.display = 'block';
-            event.target.reset();
-            
-            setTimeout(() => {
-                document.getElementById('contactSuccessMessage').style.display = 'none';
-            }, 5000);
-        }
+            // Mobile nav toggle with outside-click and Escape handling
+            const navToggle = document.getElementById('navToggle');
+            const navLinks = document.getElementById('navLinks');
+            const navOverlay = document.getElementById('navOverlay');
 
-        // Smooth scrolling for all links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            function openMobileNav() {
+                navToggle.classList.add('active');
+                navLinks.classList.add('active');
+                navOverlay.classList.add('active');
+                navToggle.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMobileNav() {
+                navToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+                navOverlay.classList.remove('active');
+                navToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+
+            function toggleMobileNav() {
+                if (navLinks.classList.contains('active')) {
+                    closeMobileNav();
+                } else {
+                    openMobileNav();
+                }
+            }
+
+            // Nav toggle button click
+            navToggle.addEventListener('click', toggleMobileNav);
+
+            // Outside click closes menu
+            navOverlay.addEventListener('click', closeMobileNav);
+
+            // Escape key closes menu
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                    closeMobileNav();
+                }
+            });
+
+            // Navigation link clicks
+            document.querySelectorAll('[data-section]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.dataset.section;
+                    if (section) {
+                        showSection(section);
+                    }
+                });
+            });
+
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('navbar');
+                if (window.scrollY > 100) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // === CHAT FUNCTIONALITY ===
+
+            const chatModal = document.getElementById('chatModal');
+            const chatInput = document.getElementById('chatInput');
+            const sendChatBtn = document.getElementById('sendChatBtn');
+            const closeChatBtn = document.getElementById('closeChatBtn');
+
+            // Open Chat Room
+            function openChatRoom(roomName, icon, memberCount) {
+                const roomData = chatRoomData[roomName];
+                if (!roomData) return;
+
+                // Update chat header
+                document.getElementById('chatRoomIcon').textContent = roomData.icon;
+                document.getElementById('chatRoomName').textContent = roomName;
+                document.getElementById('onlineCount').textContent = Math.floor(roomData.members * 0.15);
+
+                // Clear and populate messages
+                const messagesContainer = document.getElementById('chatMessages');
+                messagesContainer.innerHTML = '';
+
+                roomData.messages.forEach(msg => {
+                    const messageEl = document.createElement('div');
+                    messageEl.className = 'chat-message';
+                    messageEl.innerHTML = `
+                        <div class="message-avatar">${msg.avatar}</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-author">${msg.author}</span>
+                                <span class="message-time">${msg.time}</span>
+                            </div>
+                            <p class="message-text">${msg.text}</p>
+                        </div>
+                    `;
+                    messagesContainer.appendChild(messageEl);
+                });
+
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+                // Show modal
+                chatModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+
+                // Focus input
+                setTimeout(() => chatInput.focus(), 100);
+            }
+
+            // Close Chat Room
+            function closeChatRoom() {
+                chatModal.classList.remove('active');
+                document.body.style.overflow = '';
+                chatInput.value = '';
+            }
+
+            // Send Chat Message
+            function sendChatMessage() {
+                const message = chatInput.value.trim();
+
+                if (message) {
+                    const messagesContainer = document.getElementById('chatMessages');
+                    const messageEl = document.createElement('div');
+                    messageEl.className = 'chat-message';
+                    messageEl.innerHTML = `
+                        <div class="message-avatar">YOU</div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <span class="message-author">You</span>
+                                <span class="message-time">Just now</span>
+                            </div>
+                            <p class="message-text">${message}</p>
+                        </div>
+                    `;
+
+                    messagesContainer.appendChild(messageEl);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    chatInput.value = '';
+                    chatInput.focus();
+                }
+            }
+
+            // Chat send button
+            sendChatBtn.addEventListener('click', sendChatMessage);
+
+            // Enter key in chat input
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendChatMessage();
+                }
+            });
+
+            // Close chat button
+            closeChatBtn.addEventListener('click', closeChatRoom);
+
+            // Close modal when clicking outside
+            chatModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeChatRoom();
+                }
+            });
+
+            // Chat room buttons
+            document.querySelectorAll('[data-chat-room]').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const roomName = this.dataset.chatRoom;
+                    const icon = this.dataset.chatIcon;
+                    const members = this.dataset.chatMembers;
+                    openChatRoom(roomName, icon, members);
+                });
+            });
+
+            // === CONTACT FORM ===
+
+            const contactForm = document.getElementById('contactForm');
+            contactForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-            });
-        });
 
-        // Add entrance animations
-        window.addEventListener('load', function() {
-            const cards = document.querySelectorAll('.category-card, .group-card, .story-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                card.style.transition = 'all 0.6s ease';
-                
+                const formData = new FormData(e.target);
+                const contactData = Object.fromEntries(formData);
+
+                console.log('Contact form submitted:', contactData);
+
+                document.getElementById('contactSuccessMessage').style.display = 'block';
+                e.target.reset();
+
                 setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 150);
+                    document.getElementById('contactSuccessMessage').style.display = 'none';
+                }, 5000);
             });
-        });
 
-        // Initialize stats animation flag
-        window.statsAnimated = false;
+            // === CARD ANIMATIONS ===
+
+            window.addEventListener('load', function() {
+                const cards = document.querySelectorAll('.category-card, .group-card, .story-card');
+                cards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'all 0.6s ease';
+
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 150);
+                });
+            });
+
+            // === ANIMATED COUNTERS ===
+
+            function animateCounter(id, target, duration) {
+                const element = document.getElementById(id);
+                if (!element) return;
+                
+                let start = 0;
+                const increment = target / (duration / 16);
+
+                function updateCounter() {
+                    start += increment;
+                    if (start < target) {
+                        element.textContent = Math.floor(start).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        element.textContent = target.toLocaleString();
+                    }
+                }
+                updateCounter();
+            }
+
+            // === USER DROPDOWN (STUBS) ===
+            // Basic stubs for auth/logout functionality
+            window.loginUser = function() {
+                console.log('Login stub called');
+            };
+
+            window.logoutUser = function() {
+                console.log('Logout stub called');
+            };
+
+            window.showUserDropdown = function() {
+                console.log('User dropdown stub called');
+            };
+
+        }); // End DOMContentLoaded
     </script>
 </body>
 </html>
